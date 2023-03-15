@@ -1,5 +1,6 @@
 package com.pergamum_library.pergamum_library.controllers;
 
+import com.pergamum_library.pergamum_library.dtos.BookUpdateAuthor;
 import com.pergamum_library.pergamum_library.entities.Book;
 import com.pergamum_library.pergamum_library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BooksLibraryController {
@@ -37,4 +39,19 @@ public class BooksLibraryController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/books/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable long id, @RequestBody BookUpdateAuthor bookUpdateAuthor) {
+        Optional<Book> book = this.bookRepository.findById(id);
+        if (book.isPresent()) {
+
+            Book bookEntity = book.get();
+            bookEntity.setAuthor(bookUpdateAuthor.author());
+
+            this.bookRepository.save(bookEntity);
+
+            return ResponseEntity.ok(bookEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

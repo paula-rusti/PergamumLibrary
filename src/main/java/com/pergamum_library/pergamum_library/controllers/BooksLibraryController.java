@@ -4,6 +4,7 @@ import com.pergamum_library.pergamum_library.entities.Book;
 import com.pergamum_library.pergamum_library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class BooksLibraryController {
         return (List<Book>) this.bookRepository.findBookByTitle(title);
     }
 
-
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable long id) {
+        this.bookRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
